@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- a) Add SpreadJS Script and CSS-->
+    <script src="SpreadJS/scripts/gc.spread.sheets.all.16.2.5.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="SpreadJS/css/gc.spread.sheets.excel2013white.16.2.5.css"
+    />
+    <script type="text/javascript">
+      //   // Step 1: Create Sample Data for Data Source
+      //   function createSampleData() {
+      //     // Create sample report card data
+      //     return [
+      //       {
+      //         Course: "Calculus",
+      //         Term: 1,
+      //         Credit: 5,
+      //         Score: 80,
+      //         Teacher: "Nancy.Feehafer",
+      //       },
+      //     ];
+      //   }
+
+      //   // Step 2: Add Table with Specified Data Source
+      //   function loadTable(ss, data) {
+      //     ss.suspendPaint();
+      //     try {
+      //       var sheet = ss.getActiveSheet();
+      //       // Add a range table with the specified data source
+      //       var table = sheet.tables.addFromDataSource(
+      //         "Table1",
+      //         0,
+      //         0,
+      //         data,
+      //         GC.Spread.Sheets.Tables.TableThemes.medium2
+      //       );
+      //     } catch (e) {
+      //       alert(e.message);
+      //     }
+      //     ss.resumePaint();
+      //   }
+
+      //   // Step 3: Set Table Style
+      //   function setTableStyle(table) {
+      //     // Show header
+      //     table.showHeader(true);
+      //     // Highlight the first column
+      //     table.highlightFirstColumn(true);
+      //   }
+
+      //   // Create a function to set column widths
+      //   function setColumnWidth(sheet) {
+      //     sheet.setColumnWidth(0, 200);
+      //     sheet.setColumnWidth(1, 130);
+      //     sheet.setColumnWidth(2, 70);
+      //     sheet.setColumnWidth(3, 70);
+      //     sheet.setColumnWidth(4, 100);
+      //     sheet.setColumnWidth(5, 260);
+      //   }
+
+      //   function setBackgroundColor(sheet) {
+      //     sheet.getCell(0, 5).backColor("yellow");
+      //   }
+
+      //   // Step 4: Refresh SpreadJS Instance
+      //   function refresh() {
+      //     var ss = GC.Spread.Sheets.findControl(document.getElementById("ss"));
+      //     var sheet = ss.getActiveSheet();
+      //     sheet.reset();
+      //     sheet.setColumnCount(5);
+      //     var data = createSampleData();
+      //     loadTable(ss, data);
+      //     var table = sheet.tables.find("Table1");
+      //     setTableStyle(table);
+      //     setColumnWidth(sheet);
+      //     setBackgroundColor(sheet);
+      //   }
+
+      //   function deleteTable() {
+      //     sheet.deleteRows(1, 1);
+      //   }
+
+      //   window.onload = function () {
+      //     var spread = new GC.Spread.Sheets.Workbook(
+      //       document.getElementById("ss"),
+      //       { sheetCount: 3 }
+      //     );
+      //     var sheet = spread.getActiveSheet();
+
+      //     // Initialize SpreadJS and invoke the refresh function
+      //     // document
+      //     //   .getElementById("refreshButton")
+      //     //   .addEventListener("click", function () {
+      //     //     refresh();
+      //     //   });
+
+      //   };
+
+      window.onload = function () {
+        var spread = new GC.Spread.Sheets.Workbook(
+          document.getElementById("ss"),
+          { sheetCount: 3 }
+        );
+        var sheet = spread.getActiveSheet();
+        sheet.setValue(0, 0, 1, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(1, 0, 2, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setFormula(2, 0, "=A1+A2", GC.Spread.Sheets.SheetArea.viewport);
+    
+        sheet.setValue(0, 1, 3, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(1, 1, 5, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(0, 2, 5, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(1, 2, 8, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(2, 2, 10, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(3, 2, 5, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(4, 2, 2, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setValue(5, 2, 12, GC.Spread.Sheets.SheetArea.viewport);
+        sheet.setFormula(2, 1, "=B1+B2", GC.Spread.Sheets.SheetArea.viewport);
+        var fromRange = [new GC.Spread.Sheets.Range(0, 0, 3, 2)];
+        var toRanges = [new GC.Spread.Sheets.Range(5, 0, 3, 2)];
+
+        $("#button1").click(function () {
+          // Cut Paste Action
+          spread.commandManager().execute({
+            cmd: "clipboardPaste",
+            sheetName: "Sheet1",
+            fromSheet: sheet,
+            fromRanges: fromRange,
+            pastedRanges: toRanges,
+            isCutting: true,
+            clipboardText: "",
+            pasteOption: GC.Spread.Sheets.ClipboardPasteOptions.all,
+          });
+        });
+
+        $("#button2").click(function () {
+          spread.commandManager().execute({
+            cmd: "clipboardPaste",
+            sheetName: "Sheet1",
+            fromSheet: sheet,
+            fromRanges: fromRange,
+            pastedRanges: toRanges,
+            isCutting: false,
+            clipboardText: "",
+            pasteOption: GC.Spread.Sheets.ClipboardPasteOptions.all,
+          });
+        });
+
+        $("#button3").click(function () {
+            sheet.setFormula(6, 2, "=C1+C2+C3+C4+C5+C6", GC.Spread.Sheets.SheetArea.viewport);
+            // sheet.deleteRows(8, 50);
+          console.log("delete");
+          sheet.getCell(6, 2).backColor("yellow");
+        });
+      };
+    </script>
+  </head>
+  <body>
+    <div id="ss" style="height: 500px; width: 1500px"></div>
+
+   
+    <button type="button" id="button3" class="btn btn-primary">Calc C1:C6</button>
+    <button type="button" id="button2" class="btn btn-primary">Charge</button>
+    <button type="button" class="btn btn-primary">Primary</button>
+    <button type="button" id="button1" class="btn btn-primary">
+        Copy A1-A6 & paste to B1-B6
+      </button>
+    <button type="button" class="btn btn-primary">Primary</button>
+  </body>
+</html>
